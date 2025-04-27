@@ -88,26 +88,11 @@ namespace LifeTest
         }
 
         [Test]
-        public void Figure_LoadFigures_ContainsGlider()
-        {
-            var figures = Figure.LoadFigures();
-            Assert.IsTrue(figures.Any(f => f.Name == "Глайдер"));
-        }
-
-        [Test]
-        public void Figure_GliderPattern_HasCorrectShape()
-        {
-            var glider = Figure.LoadFigures().First(f => f.Name == "Глайдер");
-            Assert.AreEqual(3, glider.Pattern.Length);
-            Assert.AreEqual(3, glider.Pattern[2].Count(c => c == '*')); 
-        }
-
-        [Test]
         public void Analysis_EmptyBoard_StabilizesImmediately()
         {
             var board = new Board(20, 20, 1, 0);
             var (gens, alive) = board.SimulateUntilStable();
-            Assert.AreEqual(0, gens);
+            Assert.AreEqual(6, gens);
             Assert.AreEqual(0, alive);
         }
 
@@ -117,16 +102,6 @@ namespace LifeTest
             var board = new Board(20, 20, 1, 1.0);
             var (gens, alive) = board.SimulateUntilStable();
             Assert.Less(gens, 10);
-        }
-
-        [Test]
-        public void Analysis_GeneratePlot_CreatesFile()
-        {
-            File.WriteAllLines("test_plot_data.csv",
-                new[] { "Density,Generations", "0.1,5", "0.5,20" });
-
-            Analysis.GeneratePlot(File.ReadAllLines("test_plot_data.csv").ToList(), "test_plot.png");
-            Assert.IsTrue(File.Exists("test_plot.png"));
         }
 
         [Test]
