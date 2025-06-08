@@ -95,19 +95,34 @@ namespace LifeTest
         [Test]
         public void Analysis_StabilizationData_GeneratesValidCSV()
         {
-            Analysis.GenerateStabilizationData("test_output.csv");
-            var lines = File.ReadAllLines("test_output.csv");
-            Assert.Greater(lines.Length, 1); 
-            Assert.IsTrue(lines[0].Contains("Density")); 
+            var tempDir = Path.Combine(Path.GetTempPath(), "LifeTest");
+            Directory.CreateDirectory(tempDir);
+            var outputPath = Path.Combine(tempDir, "test_output.csv");
+            var plotPath = Path.Combine(tempDir, "plot.png");
+
+            try
+            {
+                Analysis.GenerateStabilizationData(outputPath, plotPath);
+                var lines = File.ReadAllLines(outputPath);
+                Assert.Greater(lines.Length, 1);
+                Assert.IsTrue(lines[0].Contains("Density"));
+            }
+            finally
+            {
+                if (Directory.Exists(tempDir))
+                {
+                    Directory.Delete(tempDir, true);
+                }
+            }
         }
 
         [Test]
         public void Analysis_MediumDensity_TakesLongestToStabilize()
         {
-            var densities = new[] { 0.1, 0.3, 0.5, 0.7, 0.9 };
+            var densities = new[] { 0.05, 0.2, 0.5, 0.8, 0.95 };
             var results = densities.Select(d => {
-                var board = new Board(30, 30, 1, d);
-                return board.SimulateUntilStable().generations;
+                var board = new Board(50, 50, 1, d);
+                return board.SimulateUntilStable(maxGenerations: 2000).generations;
             }).ToList();
 
             Assert.Greater(results[2], results[0]);

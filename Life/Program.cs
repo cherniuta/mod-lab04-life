@@ -148,16 +148,13 @@ namespace cli_life
 
         public static Figure[] LoadFigures()
         {
-
-            string gliderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "glider.txt");
-            string[] pattern = File.ReadAllLines(gliderPath);
             return new[]
             {
                 new Figure { Name = "Блок", Pattern = new[] { "**", "**" } },
                 new Figure { Name = "Улей", Pattern = new[] { " ** ", "*  *", " ** " } },
                 new Figure { Name = "Планер", Pattern = new[] { " * ", "  *", "***" } },
                 new Figure { Name = "Корабль", Pattern = new[] { "** ", "* *", " **" } },
-                new Figure { Name = "Глайдер", Pattern = pattern }
+                new Figure { Name = "Глайдер", Pattern = new[] { " * ", "* *", "** " } }
             };
         }
     }
@@ -213,7 +210,11 @@ namespace cli_life
             plot.Add.Marker(densities[maxIndex], generations[maxIndex],
                           color: Colors.Red, size: 15, shape: MarkerShape.OpenCircle);
 
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            var directory = Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
             plot.SavePng(path, 1000, 600);
         }
 
