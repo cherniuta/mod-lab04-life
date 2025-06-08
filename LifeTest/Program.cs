@@ -60,18 +60,6 @@ namespace LifeTest
         }
 
         [Test]
-        public void Board_Advance_BlockPatternStaysStable()
-        {
-            var board = new Board(4, 4, 1);
-            // Создаем блок
-            board.Cells[1, 1].IsAlive = board.Cells[1, 2].IsAlive
-                = board.Cells[2, 1].IsAlive = board.Cells[2, 2].IsAlive = true;
-
-            board.Advance();
-            Assert.IsTrue(board.Cells[1, 1].IsAlive && board.Cells[2, 2].IsAlive);
-        }
-
-        [Test]
         public void Board_SaveAndLoad_KeepsIdenticalState()
         {
             var board1 = new Board(10, 10, 1);

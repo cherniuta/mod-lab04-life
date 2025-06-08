@@ -165,7 +165,7 @@ namespace cli_life
     public static class Analysis
     {
         public static void GenerateStabilizationData(string outputPath = "stabilization_data.csv",
-                                                   string plotPath = "plot.png")
+                                                   string plotPath = "Life/plot.png")
         {
             var densities = Enumerable.Range(1, 20)
                                    .Select(x => x * 0.05)
@@ -198,19 +198,22 @@ namespace cli_life
             scatter.LineWidth = 3;
             scatter.Color = Colors.Blue;
             scatter.MarkerSize = 8;
-            scatter.Label = "Поколения до стабилизации";
 
             plot.XLabel("Плотность заполнения", size: 16);
             plot.YLabel("Поколения до стабилизации", size: 16);
             plot.Title("Анализ стабилизации игры 'Жизнь'", size: 20);
 
-            plot.Axes.SetLimits(0, 1, 0, generations.Max() * 1.1); 
-            plot.Axes.Margins(0.05, 0.1);
+            plot.Axes.Bottom.Min = -1;
+            plot.Axes.Bottom.Max = 1;
+            plot.Axes.Left.Min = -50;
+            plot.Axes.Left.Max = generations.Max() * 1.1;
+            plot.Axes.Margins(0, 0.1);
 
             int maxIndex = generations.IndexOfMax();
             plot.Add.Marker(densities[maxIndex], generations[maxIndex],
                           color: Colors.Red, size: 15, shape: MarkerShape.OpenCircle);
 
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
             plot.SavePng(path, 1000, 600);
         }
 
