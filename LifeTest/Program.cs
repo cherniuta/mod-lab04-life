@@ -113,5 +113,47 @@ namespace LifeTest
             Assert.Greater(results[2], results[0]);
             Assert.Greater(results[2], results[4]); 
         }
+
+        [Test]
+        public void Cell_AliveWith2Neighbors_StaysAlive()
+        {
+            var cell = new Cell { IsAlive = true };
+            cell.neighbors.AddRange(Enumerable.Repeat(new Cell { IsAlive = true }, 2));
+            cell.DetermineNextLiveState();
+            Assert.IsTrue(cell.IsAliveNext);
+        }
+
+        [Test]
+        public void Cell_AliveWith3Neighbors_StaysAlive()
+        {
+            var cell = new Cell { IsAlive = true };
+            cell.neighbors.AddRange(Enumerable.Repeat(new Cell { IsAlive = true }, 3));
+            cell.DetermineNextLiveState();
+            Assert.IsTrue(cell.IsAliveNext);
+        }
+
+        [Test]
+        public void Board_EmptyBoard_NoAliveCells()
+        {
+            var board = new Board(10, 10, 1, 0);
+            Assert.AreEqual(0, board.CountAliveCells());
+        }
+
+        [Test]
+        public void Board_FullBoard_AllCellsAlive()
+        {
+            var board = new Board(10, 10, 1, 1.0);
+            Assert.AreEqual(100, board.CountAliveCells());
+        }
+
+        [Test]
+        public void Board_Advance_ChangesState()
+        {
+            var board = new Board(10, 10, 1, 0.5);
+            int before = board.CountAliveCells();
+            board.Advance();
+            int after = board.CountAliveCells();
+            Assert.AreNotEqual(before, after);
+        }
     }
 }
