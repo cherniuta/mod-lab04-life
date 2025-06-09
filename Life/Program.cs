@@ -161,7 +161,7 @@ namespace cli_life
 
     public static class Analysis
     {
-        public static void GenerateStabilizationData(string outputPath = "stabilization_data.csv",
+        public static void GenerateStabilizationData(string outputPath = "Life/data.txt",
                                                    string plotPath = "Life/plot.png")
         {
             var densities = Enumerable.Range(1, 20)
